@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { Nullable } from '@tager/web-core';
@@ -70,4 +70,21 @@ export function useExpanded(): [boolean, () => void] {
   }, []);
 
   return [isExpanded, toggleBar];
+}
+
+export function useCustomFont(isBarVisible: boolean): void {
+  const isAdded = useRef(false);
+
+  useEffect(() => {
+    if (!isBarVisible || isAdded.current) return;
+
+    isAdded.current = true;
+
+    const fontLink = document.createElement('link');
+    fontLink.href =
+      'https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap';
+    fontLink.rel = 'stylesheet';
+
+    document.head.appendChild(fontLink);
+  }, [isBarVisible]);
 }

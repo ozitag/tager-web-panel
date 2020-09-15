@@ -1,7 +1,12 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { useAdminPage, useAdminProfile, useExpanded } from './AdminBar.hooks';
+import {
+  useAdminPage,
+  useAdminProfile,
+  useCustomFont,
+  useExpanded,
+} from './AdminBar.hooks';
 import ExpandMoreIcon from './components/ExpandMoreIcon';
 
 function AdminBar() {
@@ -10,6 +15,8 @@ function AdminBar() {
   const [isExpanded, toggleBar] = useExpanded();
 
   const isVisible = Boolean(adminProfile);
+
+  useCustomFont(isVisible);
 
   if (!isVisible) return null;
 
@@ -47,6 +54,11 @@ function AdminBar() {
 }
 
 const Container = styled.div<{ isExpanded: boolean }>`
+  font-family: Nunito, -apple-system, 'BlickMacSystemFont', 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  color: #495057;
+
   position: fixed;
   left: 0;
   right: 0;
@@ -100,9 +112,13 @@ const Section = styled.div`
 `;
 
 const AdminButtonLink = styled.a`
-  padding: 5px 1rem 8px;
+  height: 35px;
+  white-space: nowrap;
+  padding: 0 1rem;
   border: 1px solid #666;
   border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
 
   &:hover {
     background-color: #f0f0f0;
