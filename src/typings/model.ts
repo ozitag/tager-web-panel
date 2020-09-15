@@ -4,5 +4,9 @@ export type AdminProfileType = {
 };
 
 export type PanelPageInfo = {
-  adminPageUrl: string;
+  language: string;
+  button: {
+    label: string;
+    url: string;
+  };
 };

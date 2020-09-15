@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { Nullable } from '@tager/web-core';
+import { isServer, Nullable } from '@tager/web-core';
 
 import { AdminProfileType, PanelPageInfo } from '../../typings/model';
 import { getAdminProfile, getPanelPage } from '../../services/requests';
@@ -54,8 +54,19 @@ export function useAdminPage(): Nullable<PanelPageInfo> {
   return pageInfo;
 }
 
-export function useExpanded(): [boolean, () => void] {
+function getIsExpanded(): boolean {
+  if (isServer()) return false;
+
+  return localStorage.getItem(IS_ADMIN_BAR_EXPANDED_KEY) === 'true';
+}
+
+export function useExpanded(): {
+  isInitiallyExpanded: boolean;
+  isExpanded: boolean;
+  toggle: () => void;
+} {
   const [isExpanded, setExpanded] = useState<boolean>(false);
+  const isInitiallyExpandedRef = useRef<boolean>(!getIsExpanded());
 
   function toggleBar() {
     const newValue = !isExpanded;
@@ -64,12 +75,14 @@ export function useExpanded(): [boolean, () => void] {
   }
 
   useEffect(() => {
-    const isExpandedInitial =
-      localStorage.getItem(IS_ADMIN_BAR_EXPANDED_KEY) === 'true';
-    setExpanded(Boolean(isExpandedInitial));
+    setExpanded(getIsExpanded());
   }, []);
 
-  return [isExpanded, toggleBar];
+  return {
+    isExpanded,
+    isInitiallyExpanded: isInitiallyExpandedRef.current,
+    toggle: toggleBar,
+  };
 }
 
 export function useCustomFont(isBarVisible: boolean): void {

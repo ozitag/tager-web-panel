@@ -5,3 +5,6 @@ dist
 .idea
 .github
 report.json
+.next
+.env
+.env.*

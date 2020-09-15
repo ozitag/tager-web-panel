@@ -1,5 +1,7 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React, { useMemo } from 'react';
+import styled, { css, keyframes } from 'styled-components';
+
+import { getTranslateFunction } from '../../services/i18n';
 
 import {
   useAdminPage,
@@ -12,7 +14,11 @@ import ExpandMoreIcon from './components/ExpandMoreIcon';
 function AdminBar() {
   const adminProfile = useAdminProfile();
   const pageInfo = useAdminPage();
-  const [isExpanded, toggleBar] = useExpanded();
+  const { isExpanded, toggle, isInitiallyExpanded } = useExpanded();
+
+  const t = useMemo(() => getTranslateFunction(pageInfo?.language ?? ''), [
+    pageInfo,
+  ]);
 
   const isVisible = Boolean(adminProfile);
 
@@ -22,36 +28,45 @@ function AdminBar() {
 
   return (
     <Container isExpanded={isExpanded}>
-      <Wrapper>
+      <Wrapper isInitiallyExpanded={isInitiallyExpanded}>
         <Inner>
           <Section>
             <Title>TAGER</Title>
-            {pageInfo?.adminPageUrl ? (
+            {pageInfo ? (
               <AdminButtonLink
                 target="_blank"
                 rel="noreferrer"
-                href={pageInfo.adminPageUrl}
+                href={pageInfo.button.url}
               >
-                Редактировать страницу
+                {pageInfo.button.label}
               </AdminButtonLink>
             ) : null}
           </Section>
           <Section>
             <AdminButtonLink target="_blank" rel="noreferrer" href="/admin">
-              Панель управления
+              {t('adminBar')}
             </AdminButtonLink>
 
             <UserName>{adminProfile?.name}</UserName>
           </Section>
         </Inner>
 
-        <ExpandButton onClick={toggleBar}>
+        <ExpandButton onClick={toggle}>
           <ExpandIcon />
         </ExpandButton>
       </Wrapper>
     </Container>
   );
 }
+
+const fadeInAnimation = keyframes`
+  from {
+    transform: translateY(-100%) translateY(22px);
+  }
+  to {
+    transform: translateY(0)
+  }
+`;
 
 const Container = styled.div<{ isExpanded: boolean }>`
   font-family: Nunito, -apple-system, 'BlickMacSystemFont', 'Segoe UI', 'Roboto',
@@ -84,8 +99,16 @@ const Container = styled.div<{ isExpanded: boolean }>`
       : null}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isInitiallyExpanded: boolean }>`
+  will-change: transform;
   transition: transform 0.3s linear;
+
+  ${(props) =>
+    props.isInitiallyExpanded
+      ? css`
+          animation: ${fadeInAnimation} 0.5s linear;
+        `
+      : null}
 `;
 
 const Inner = styled.div`
