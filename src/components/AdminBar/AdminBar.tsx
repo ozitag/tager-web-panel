@@ -63,7 +63,7 @@ const Container = styled.div<{ isExpanded: boolean }>`
   left: 0;
   right: 0;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   height: 0;
 
   @media (max-width: 767.98px) {
