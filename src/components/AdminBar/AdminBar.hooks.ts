@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { isServer, Nullable } from '@tager/web-core';
+import { dividePathnameAndSearch, isServer, Nullable } from '@tager/web-core';
 
 import {
   AdminProfileType,
@@ -65,15 +65,19 @@ export function useAdminPageInfo(): Nullable<PageInfoType> {
   const router = useRouter();
   const [pageInfo, setPageInfo] = useState<Nullable<PageInfoType>>(null);
 
+  const pagePath = useMemo(() => dividePathnameAndSearch(router.asPath)[0], [
+    router.asPath,
+  ]);
+
   useEffect(() => {
-    getPageInfo(router.pathname)
+    getPageInfo(pagePath)
       .then((response) => {
         setPageInfo(response.data);
       })
       .catch(() => {
         setPageInfo(null);
       });
-  }, [router.pathname]);
+  }, [pagePath]);
 
   return pageInfo;
 }
