@@ -3,8 +3,16 @@ import { useRouter } from 'next/router';
 
 import { isServer, Nullable } from '@tager/web-core';
 
-import { AdminProfileType, PanelPageInfo } from '../../typings/model';
-import { getAdminProfile, getPanelPage } from '../../services/requests';
+import {
+  AdminProfileType,
+  PanelInfoType,
+  PageInfoType,
+} from '../../typings/model';
+import {
+  getAdminProfile,
+  getPageInfo,
+  getPanelInfo,
+} from '../../services/requests';
 import {
   ADMIN_ACCESS_TOKEN_KEY,
   IS_ADMIN_BAR_EXPANDED_KEY,
@@ -37,12 +45,28 @@ export function useAdminProfile(): Nullable<AdminProfileType> {
   return adminProfile;
 }
 
-export function useAdminPage(): Nullable<PanelPageInfo> {
-  const router = useRouter();
-  const [pageInfo, setPageInfo] = useState<Nullable<PanelPageInfo>>(null);
+export function useAdminPanelInfo(): Nullable<PanelInfoType> {
+  const [panelInfo, setPanelInfo] = useState<Nullable<PanelInfoType>>(null);
 
   useEffect(() => {
-    getPanelPage(router.pathname)
+    getPanelInfo()
+      .then((response) => {
+        setPanelInfo(response.data);
+      })
+      .catch(() => {
+        setPanelInfo(null);
+      });
+  }, []);
+
+  return panelInfo;
+}
+
+export function useAdminPageInfo(): Nullable<PageInfoType> {
+  const router = useRouter();
+  const [pageInfo, setPageInfo] = useState<Nullable<PageInfoType>>(null);
+
+  useEffect(() => {
+    getPageInfo(router.pathname)
       .then((response) => {
         setPageInfo(response.data);
       })

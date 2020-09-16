@@ -4,7 +4,8 @@ import styled, { css, keyframes } from 'styled-components';
 import { getTranslateFunction } from '../../services/i18n';
 
 import {
-  useAdminPage,
+  useAdminPageInfo,
+  useAdminPanelInfo,
   useAdminProfile,
   useCustomFont,
   useExpanded,
@@ -13,11 +14,12 @@ import ExpandMoreIcon from './components/ExpandMoreIcon';
 
 function AdminBar() {
   const adminProfile = useAdminProfile();
-  const pageInfo = useAdminPage();
+  const pageInfo = useAdminPageInfo();
+  const panelInfo = useAdminPanelInfo();
   const { isExpanded, toggle, isInitiallyExpanded } = useExpanded();
 
-  const t = useMemo(() => getTranslateFunction(pageInfo?.language ?? ''), [
-    pageInfo,
+  const t = useMemo(() => getTranslateFunction(panelInfo?.language ?? ''), [
+    panelInfo,
   ]);
 
   const isVisible = Boolean(adminProfile);
@@ -26,32 +28,48 @@ function AdminBar() {
 
   if (!isVisible) return null;
 
+  const actions = pageInfo?.actions ?? [];
+
   return (
     <Container isExpanded={isExpanded}>
       <Wrapper isInitiallyExpanded={isInitiallyExpanded}>
         <Inner>
           <Section>
             <Title>TAGER</Title>
-            {pageInfo?.button ? (
+            {actions.map((action, index) => (
+              <AdminButtonLink
+                key={index}
+                target="_blank"
+                rel="noreferrer"
+                href={action.url}
+              >
+                {action.label}
+              </AdminButtonLink>
+            ))}
+          </Section>
+
+          {pageInfo?.model ? (
+            <PageName>
+              {pageInfo.model.type}: {pageInfo.model.name}
+            </PageName>
+          ) : null}
+
+          <Section>
+            {panelInfo ? (
               <AdminButtonLink
                 target="_blank"
                 rel="noreferrer"
-                href={pageInfo.button.url}
+                href={panelInfo.adminHomeUrl}
               >
-                {pageInfo.button.label}
+                {t('adminBar')}
               </AdminButtonLink>
             ) : null}
-          </Section>
-          <Section>
-            <AdminButtonLink target="_blank" rel="noreferrer" href="/admin">
-              {t('adminBar')}
-            </AdminButtonLink>
 
             <UserName>{adminProfile?.name}</UserName>
           </Section>
         </Inner>
 
-        <ExpandButton onClick={toggle}>
+        <ExpandButton onClick={toggle} type="button">
           <ExpandIcon />
         </ExpandButton>
       </Wrapper>
@@ -120,6 +138,7 @@ const Inner = styled.div`
   background: white;
   height: 50px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.12);
+  position: relative;
 `;
 
 const Title = styled.span`
@@ -127,6 +146,14 @@ const Title = styled.span`
   letter-spacing: 0.15em;
   font-size: 20px;
   margin-right: 1rem;
+`;
+
+const PageName = styled.span`
+  font-size: 20px;
+  margin-right: 1rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const Section = styled.div`

@@ -1,11 +1,19 @@
 import { request, ResponseBody } from '@tager/web-core';
 
-import { AdminProfileType, PanelPageInfo } from '../typings/model';
+import {
+  AdminProfileType,
+  PageInfoType,
+  PanelInfoType,
+} from '../typings/model';
 
-export function getPanelPage(
+export function getPageInfo(
   pagePath: string
-): Promise<ResponseBody<PanelPageInfo>> {
+): Promise<ResponseBody<PageInfoType>> {
   return request.get({ path: '/tager/panel/page', params: { path: pagePath } });
+}
+
+export function getPanelInfo(): Promise<ResponseBody<PanelInfoType>> {
+  return request.get({ path: '/tager/panel/info' });
 }
 
 export function getAdminProfile(
