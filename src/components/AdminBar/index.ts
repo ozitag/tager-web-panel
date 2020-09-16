@@ -1,1 +1,1 @@
-export { default } from './AdminBar';
+export { default } from './AdminBar.container';

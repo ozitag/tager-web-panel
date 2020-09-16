@@ -1,3 +1,5 @@
+import { Nullable } from '@tager/web-core';
+
 export type AdminProfileType = {
   name: string;
   email: string;
@@ -5,8 +7,8 @@ export type AdminProfileType = {
 
 export type PanelPageInfo = {
   language: string;
-  button: {
+  button: Nullable<{
     label: string;
     url: string;
-  };
+  }>;
 };

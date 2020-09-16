@@ -32,7 +32,7 @@ function AdminBar() {
         <Inner>
           <Section>
             <Title>TAGER</Title>
-            {pageInfo ? (
+            {pageInfo?.button ? (
               <AdminButtonLink
                 target="_blank"
                 rel="noreferrer"
