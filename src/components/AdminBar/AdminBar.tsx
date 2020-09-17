@@ -169,15 +169,14 @@ const AdminButtonLink = styled.a`
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
+  margin-right: 1rem;
 
   &:hover {
     background-color: #f0f0f0;
   }
 `;
 
-const UserName = styled.span`
-  margin-left: 1rem;
-`;
+const UserName = styled.span``;
 
 const ExpandButton = styled.button`
   display: inline-block;
