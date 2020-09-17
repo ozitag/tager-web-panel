@@ -91,6 +91,8 @@ const Container = styled.div<{ isExpanded: boolean }>`
     'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   color: #495057;
+  white-space: nowrap;
+  font-size: 16px;
 
   position: fixed;
   left: 0;
@@ -133,8 +135,7 @@ const Inner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.5rem;
-  font-size: 1rem;
+  padding: 0 24px;
   background: white;
   height: 50px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.12);
@@ -145,15 +146,17 @@ const Title = styled.span`
   font-weight: 600;
   letter-spacing: 0.15em;
   font-size: 20px;
-  margin-right: 1rem;
+  margin-right: 16px;
 `;
 
-const PageName = styled.span`
-  font-size: 20px;
-  margin-right: 1rem;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+const PageName = styled.p`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 16px;
+
+  @media (max-width: 1259.98px) {
+    display: none;
+  }
 `;
 
 const Section = styled.div`
@@ -164,12 +167,16 @@ const Section = styled.div`
 const AdminButtonLink = styled.a`
   height: 35px;
   white-space: nowrap;
-  padding: 0 1rem;
+  padding: 0 16px;
   border: 1px solid #666;
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
-  margin-right: 1rem;
+  margin-right: 16px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 
   &:hover {
     background-color: #f0f0f0;
