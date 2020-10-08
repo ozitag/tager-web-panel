@@ -79,7 +79,7 @@ function AdminBar() {
 
 const fadeInAnimation = keyframes`
   from {
-    transform: translateY(-100%) translateY(22px);
+    transform: translateY(-100%);
   }
   to {
     transform: translateY(0)
@@ -109,7 +109,7 @@ const Container = styled.div<{ isExpanded: boolean }>`
     props.isExpanded
       ? css`
           ${Wrapper} {
-            transform: translateY(-100%) translateY(22px);
+            transform: translateY(-100%);
           }
 
           ${ExpandIcon} {
@@ -186,13 +186,14 @@ const AdminButtonLink = styled.a`
 const UserName = styled.span``;
 
 const ExpandButton = styled.button`
+  position: absolute;
   display: inline-block;
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-top: 0;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  margin-left: calc(100% - 40px);
+  right: 20px;
 `;
 
 const ExpandIcon = styled(ExpandMoreIcon)`
