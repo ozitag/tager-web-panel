@@ -1,6 +1,6 @@
 {
   "name": "@tager/web-panel",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "author": "Ivan Saranchonkau",
   "license": "MIT",
   "main": "dist/index.js",
