@@ -65,8 +65,15 @@ export function useAdminPageInfo(): Nullable<PageInfoType> {
   const router = useRouter();
   const [pageInfo, setPageInfo] = useState<Nullable<PageInfoType>>(null);
 
-  const pagePath = useMemo(() => dividePathnameAndSearch(router.asPath)[0], [
-    router.asPath,
+  const pagePath = useMemo(() => {
+    const pathname = dividePathnameAndSearch(router.asPath)[0];
+    if (router.basePath && router.basePath !== '/') {
+      return router.basePath + pathname;
+    } else {
+      return pathname;
+    }
+  }, [
+    router.asPath
   ]);
 
   useEffect(() => {
