@@ -6,16 +6,16 @@ import { dividePathnameAndSearch, isServer, Nullable } from '@tager/web-core';
 import {
   AdminProfileType,
   PanelInfoType,
-  PageInfoType,
+  PageInfoType
 } from '../../typings/model';
 import {
   getAdminProfile,
   getPageInfo,
-  getPanelInfo,
+  getPanelInfo
 } from '../../services/requests';
 import {
   ADMIN_ACCESS_TOKEN_KEY,
-  IS_ADMIN_BAR_EXPANDED_KEY,
+  IS_ADMIN_BAR_EXPANDED_KEY
 } from '../../constants/common';
 
 export function useAdminProfile(): Nullable<AdminProfileType> {
@@ -49,6 +49,10 @@ export function useAdminPanelInfo(): Nullable<PanelInfoType> {
   const [panelInfo, setPanelInfo] = useState<Nullable<PanelInfoType>>(null);
 
   useEffect(() => {
+    if (!localStorage.getItem(ADMIN_ACCESS_TOKEN_KEY)) {
+      return;
+    }
+
     getPanelInfo()
       .then((response) => {
         setPanelInfo(response.data);
@@ -77,6 +81,10 @@ export function useAdminPageInfo(): Nullable<PageInfoType> {
   ]);
 
   useEffect(() => {
+    if (!localStorage.getItem(ADMIN_ACCESS_TOKEN_KEY)) {
+      return;
+    }
+
     getPageInfo(pagePath)
       .then((response) => {
         setPageInfo(response.data);
@@ -116,7 +124,7 @@ export function useExpanded(): {
   return {
     isExpanded,
     isInitiallyExpanded: isInitiallyExpandedRef.current,
-    toggle: toggleBar,
+    toggle: toggleBar
   };
 }
 
