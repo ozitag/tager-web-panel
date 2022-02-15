@@ -6,16 +6,16 @@ import { dividePathnameAndSearch, isServer, Nullable } from '@tager/web-core';
 import {
   AdminProfileType,
   PanelInfoType,
-  PageInfoType
+  PageInfoType,
 } from '../../typings/model';
 import {
   getAdminProfile,
   getPageInfo,
-  getPanelInfo
+  getPanelInfo,
 } from '../../services/requests';
 import {
   ADMIN_ACCESS_TOKEN_KEY,
-  IS_ADMIN_BAR_EXPANDED_KEY
+  IS_ADMIN_BAR_EXPANDED_KEY,
 } from '../../constants/common';
 
 export function useAdminProfile(): Nullable<AdminProfileType> {
@@ -49,11 +49,16 @@ export function useAdminPanelInfo(): Nullable<PanelInfoType> {
   const [panelInfo, setPanelInfo] = useState<Nullable<PanelInfoType>>(null);
 
   useEffect(() => {
-    if (!localStorage.getItem(ADMIN_ACCESS_TOKEN_KEY)) {
-      return;
-    }
+    const accessToken = localStorage.getItem(ADMIN_ACCESS_TOKEN_KEY);
 
-    getPanelInfo()
+    if (!accessToken) return;
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', `Bearer ${accessToken}`);
+
+    getPanelInfo(headers)
       .then((response) => {
         setPanelInfo(response.data);
       })
@@ -76,16 +81,19 @@ export function useAdminPageInfo(): Nullable<PageInfoType> {
     } else {
       return pathname;
     }
-  }, [
-    router.asPath
-  ]);
+  }, [router.asPath]);
 
   useEffect(() => {
-    if (!localStorage.getItem(ADMIN_ACCESS_TOKEN_KEY)) {
-      return;
-    }
+    const accessToken = localStorage.getItem(ADMIN_ACCESS_TOKEN_KEY);
 
-    getPageInfo(pagePath)
+    if (!accessToken) return;
+
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Accept', 'application/json');
+    headers.append('Authorization', `Bearer ${accessToken}`);
+
+    getPageInfo(pagePath, headers)
       .then((response) => {
         setPageInfo(response.data);
       })
@@ -124,7 +132,7 @@ export function useExpanded(): {
   return {
     isExpanded,
     isInitiallyExpanded: isInitiallyExpandedRef.current,
-    toggle: toggleBar
+    toggle: toggleBar,
   };
 }
 
