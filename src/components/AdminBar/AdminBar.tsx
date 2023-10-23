@@ -94,6 +94,10 @@ const Container = styled.div<{ isExpanded: boolean }>`
   white-space: nowrap;
   font-size: 16px;
 
+  @media print {
+   display: none;
+  }
+
   position: fixed;
   left: 0;
   right: 0;
